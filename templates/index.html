@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shadow Data</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0d1117;
+      --panel:#0f1623;
+      --panel-2:#111a2a;
+      --text:#e6edf3;
+      --muted:#9aa7b2;
+      --brand:#3b82f6;    /* blue */
+      --brand-2:#60a5fa;
+      --accent:#14b8a6;   /* teal */
+      --card-shadow:0 12px 30px rgba(0,0,0,0.35);
+      --border:1px solid rgba(148,163,184,0.15);
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family: 'Orbitron', sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+    }
+
+    /* Hero (keeps your image) */
+    .hero{
+      background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYSvQXVqSi2T-mBhJpFTafyiTuU659SsEXKNoyWpTw72gpwh74VVRL72U&s=10');
+      background-size:cover;
+      background-position:center;
+      padding:90px 20px;
+      text-align:center;
+      position:relative;
+      isolation:isolate;
+    }
+    .hero::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg, rgba(13,17,23,0.55), rgba(13,17,23,0.85));
+      z-index:0;
+    }
+    .hero h1{
+      position:relative;z-index:1;
+      background:linear-gradient(90deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35));
+      padding:18px 36px;
+      border:var(--border);
+      border-radius:12px;
+      font-size:clamp(1.8rem,4vw,2.6rem);
+      color:#fff;display:inline-block;max-width:90%;
+      word-wrap:break-word;
+      box-shadow:0 8px 30px rgba(0,0,0,0.25);
+      backdrop-filter:saturate(120%) blur(2px);
+    }
+
+    /* Upload */
+    .upload-box{
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      padding:28px;border-radius:12px;box-shadow:var(--card-shadow);
+      max-width:520px;margin:-60px auto 28px;text-align:center;position:relative;z-index:2;width:90%;
+      border:var(--border);
+    }
+    .upload-box h2{color:var(--brand-2);margin-bottom:8px}
+    .custom-file-label{
+      display:inline-block;
+      background:linear-gradient(90deg, var(--brand), var(--accent));
+      color:#0b1220;padding:12px 22px;border-radius:8px;cursor:pointer;
+      font-weight:700;font-size:clamp(0.9rem,2.5vw,1rem);border:none;
+      box-shadow:0 6px 18px rgba(59,130,246,0.35);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .custom-file-label {
+      background: #00c6ff;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #fff;
+      display: inline-block;
+    }
+    .custom-file-label:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(59,130,246,0.45)}
+    .custom-file-label:focus-visible, button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    #fileName{display:block;margin-top:10px;color:var(--muted);font-size:0.9rem}
+    button{
+      margin-top:12px;padding:10px 20px;border-radius:8px;border:none;
+      background:linear-gradient(90deg, var(--brand-2), var(--brand));
+      color:#0b1220;cursor:pointer;font-weight:700;font-size:clamp(0.9rem,2.5vw,1rem);
+      box-shadow:0 6px 18px rgba(59,130,246,0.35);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    button:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(59,130,246,0.45)}
+
+    /* Steps */
+    .steps-box{
+      max-width:520px;margin:20px auto 40px;
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      padding:16px 22px;border-radius:10px;box-shadow:var(--card-shadow);
+      text-align:center;color:var(--text);font-size:clamp(0.9rem,2.5vw,1rem);width:90%;
+      border:var(--border);
+    }
+    .steps-box strong{color:var(--brand-2)}
+
+    /* Results */
+    .results{
+      padding:28px;max-width:1100px;margin:18px auto 60px;
+      background:linear-gradient(180deg, #0e1522, #0d131f);
+      border-radius:12px;box-shadow:var(--card-shadow);width:95%;border:var(--border);
+    }
+    h2,h3{color:var(--brand-2);margin-bottom:12px}
+    .speed-summary{text-align:center;margin-bottom:28px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+    .left,.right{display:flex;flex-direction:column;gap:18px}
+
+    .meter-card{
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      padding:18px;border-radius:12px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,0.35);border:var(--border)
+    }
+    canvas{display:block;margin:0 auto;max-width:100%;height:auto}
+
+    .legend{margin-top:10px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;font-size:0.95rem;color:var(--muted)}
+    .legend-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;background:rgba(148,163,184,0.08);border:var(--border)}
+    .legend-swatch{width:14px;height:14px;border-radius:3px;display:inline-block}
+
+    .suggestions{
+      margin-top:14px;text-align:left;background:rgba(20,184,166,0.08);
+      padding:12px;border-radius:8px;color:var(--text);border:1px solid rgba(20,184,166,0.35)
+    }
+
+    .category-chart,.top5-box,.pie-box,.bar-box{
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.35);
+      overflow-x:auto;border:var(--border)
+    }
+    table{width:100%;border-collapse:collapse;margin-top:12px;font-size:0. Nine;/* prevent lint typo */ font-size:0.9rem;color:var(--text)}
+    table,th,td{border:1px solid rgba(148,163,184,0.15)}
+    th,td{padding:8px;text-align:left}
+    th{background:rgba(148,163,184,0.08);color:var(--brand-2)}
+
+    ul.clean{list-style:none;padding-left:0;margin:8px 0}
+    ul.clean li{padding:8px 6px;border-bottom:1px dashed rgba(148,163,184,0.15)}
+    .risk-box{margin-top:10px;padding:14px;border-radius:10px;text-align:center;font-weight:700;font-size:1.05rem;color:black;border:var(--border)}
+
+    .no-data{text-align:center;padding:20px;color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .grid{grid-template-columns:1fr}
+      .hero{padding:60px 15px}
+      .upload-box,.steps-box,.results{margin:15px auto}
+    }
+    @media (max-width:500px){
+      .hero h1{padding:12px 20px;font-size:1.6rem}
+      button,.custom-file-label{width:100%}
+      .legend{font-size:0.85rem}
+      table{font-size:0.85rem}
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important}
+    }
+
+    #speedometer {
+      filter: drop-shadow(0 0 12px rgba(0, 255, 170, 0.6));
+      transition: filter 0.3s ease-in-out;
+    }
+
+    .green-glow {
+      filter: drop-shadow(0 0 20px rgba(0, 255, 170, 0.9));
+    }
+
+    .yellow-glow {
+      filter: drop-shadow(0 0 20px rgba(255, 220, 50, 0.9));
+    }
+
+    .red-glow {
+      filter: drop-shadow(0 0 20px rgba(255, 50, 50, 0.9));
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1>SHADOW DATA</h1>
+  </div>
+
+  <div class="upload-box">
+    <h2>Upload Your Google Takeout File</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" id="file" name="file" accept=".zip,.html,.json" required style="display:none;">
+      <label class="custom-file-label" for="file">📂 Select File</label>
+      <span id="fileName">No file chosen</span>
+      <br>
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('file');
+    const fileNameSpan = document.getElementById('fileName');
+
+    fileInput.addEventListener('change', function() {
+      if (this.files && this.files.length > 0) {
+        fileNameSpan.textContent = this.files[0].name;
+      } else {
+        fileNameSpan.textContent = 'No file chosen';
+      }
+    });
+  </script>
+  <div class="steps-box">
+    <strong>How to takeout:</strong>
+    <p>
+      1. Go to Google Takeout.<br>
+      2. Select the products you want to download.<br>
+      3. Click "Next Step" and choose export settings.<br>
+      4. Download and upload the .zip file here.
+    </p>
+  </div>
+
+  {% if categories or top_5_data %}
+  <div class="results">
+    <div class="speed-summary">
+      <div class="meter-card">
+        <canvas id="speedometer" width="520" height="260"></canvas>
+        <h3 style="margin-top:10px;">Risk:
+          {% if risk_level %}{{ risk_level }}{% else %}N/A{% endif %}
+          {% if risk_percent is not none %}- {{ risk_percent }}%{% endif %}
+        </h3>
+
+        {% if suggestion %}
+          <div class="risk-box" style="background-color: {{ risk_color }};">{{ suggestion }}</div>
+        {% endif %}
+
+        <div class="legend" aria-hidden="true">
+          <div class="legend-item"><span class="legend-swatch" style="background:#16a34a"></span>Low</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#f59e0b"></span>Medium</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#ef4444"></span>High</div>
+        </div>
+
+        {% if risk_suggestions %}
+        <div class="suggestions">
+          <strong>Suggestions:</strong>
+          <ul class="clean">{% for tip in risk_suggestions %}<li>{{ tip }}</li>{% endfor %}</ul>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Quick Summary -->
+      <div class="meter-card" style="margin-top:20px; text-align:left; color:var(--text);">
+        <h3>Quick Summary</h3>
+        <p><strong>File:</strong> {{ filename if filename else '—' }}</p>
+        <p><strong>Risk Level:</strong> {{ risk_level if risk_level else '—' }}</p>
+        <p><strong>Risk %:</strong> {{ risk_percent if risk_percent is not none else '—' }}%</p>
+        {% if categories %}
+          <h4 style="margin-top:10px; color:var(--brand-2);">Top Category</h4>
+          {% set top_cat = (categories|dictsort(true, 'value')|first)[0] if categories|length > 0 else None %}
+          <p>{{ top_cat if top_cat else '—' }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Left column -->
+      <div class="left">
+        <div class="category-chart">
+          <h3>Activity Categories</h3>
+          {% if categories %}
+            <table>
+              <tr><th>Category</th><th>Count</th></tr>
+              {% for cat, val in categories.items() %}
+                <tr><td>{{ cat }}</td><td>{{ val }}</td></tr>
+              {% endfor %}
+            </table>
+          {% endif %}
+        </div>
+
+        <div class="pie-box">
+          <h3>Pie Chart</h3>
+          {% if chart_url %}
+            <div style="margin-top:12px; text-align:center;">
+              <img src="{{ url_for('static', filename=chart_url.split('/')[-1]) }}" alt="Pie Chart" width="360" style="border-radius:8px; max-width:100%; height:auto;">
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div class="right">
+        <div class="bar-box">
+          <h3>Activity Count Bar Graph</h3>
+          {% if categories %}
+            <canvas id="barChart" width="400" height="220"></canvas>
+          {% else %}
+            <div class="no-data">No data available</div>
+          {% endif %}
+        </div>
+
+        <div class="top5-box">
+          <h3>Top 5 Items</h3>
+          {% if top_5_data %}
+            <ul class="clean">
+              {% for label, count in top_5_data %}
+                {% if label != "No data found" %}
+                  <li>{{ label }} — <strong>{{ count }}</strong></li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+            <canvas id="top5Chart" width="400" height="220" style="margin-top:12px;"></canvas>
+          {% else %}
+            <div class="no-data">No Top 5 data available</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Awareness -->
+    <div class="meter-card" style="margin-top:24px; text-align:left;">
+      <h4 style="color:var(--brand-2);">Awareness</h4>
+      <p style="color:var(--muted);">
+        Learn how Google collects data and how to reduce tracking.
+        Click <strong>Directions</strong> on the home page for a step-by-step guide
+        to export the correct Takeout files.
+      </p>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- File UI -->
+  <script>
+    const fileInput = document.getElementById('file');
+    const fileNameSpan = document.getElementById('fileName');
+    if (fileInput) {
+      fileInput.addEventListener('change', () => {
+        fileNameSpan.textContent = fileInput.files.length ? fileInput.files[0].name : 'No file chosen';
+      });
+    }
+  </script>
+
+  <!-- Speedometer: responsive + HiDPI crisp -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
+  <script>
+  (function(){
+    const canvas = document.getElementById('speedometer');
+    if(!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const percent = {{ risk_percent if risk_percent is not none else 0 }};
+    let current = 0;
+
+    function resizeCanvas(){
+      const dpr = window.devicePixelRatio || 1;
+      const cssWidth = canvas.parentElement.clientWidth || 520;
+      const cssHeight = Math.max((cssWidth/2), 220); // keep at least 220px tall
+      canvas.style.width = cssWidth + 'px';
+      canvas.style.height = cssHeight + 'px';
+      canvas.width = Math.floor(cssWidth * dpr);
+      canvas.height = Math.floor(cssHeight * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0); // draw in CSS pixels
+    }
+
+    function draw(p){
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      const cx = w/2, cy = h - 8;
+      const radius = Math.min(w/2 - 40, 180);
+
+      ctx.clearRect(0,0,w,h);
+      ctx.lineWidth = 34; 
+      ctx.lineCap = 'round';
+
+      const start = Math.PI, full = Math.PI;
+      const seg1 = start + full * 0.33, seg2 = start + full * 0.66;
+
+      // Glow based on zone
+      if (p <= 33) { // green
+        ctx.shadowBlur = 25;
+        ctx.shadowColor = 'rgba(22,163,74,0.8)';
+      } else if (p <= 66) { // yellow
+        ctx.shadowBlur = 25;
+        ctx.shadowColor = 'rgba(245,158,11,0.8)';
+      } else { // red
+        ctx.shadowBlur = 25;
+        ctx.shadowColor = 'rgba(239,68,68,0.8)';
+      }
+
+      // arcs with glow
+      ctx.beginPath(); ctx.strokeStyle = '#16a34a'; ctx.arc(cx,cy,radius, start, seg1); ctx.stroke();
+      ctx.beginPath(); ctx.strokeStyle = '#f59e0b'; ctx.arc(cx,cy,radius, seg1, seg2); ctx.stroke();
+      ctx.beginPath(); ctx.strokeStyle = '#ef4444'; ctx.arc(cx,cy,radius, seg2, start+full); ctx.stroke();
+
+      // reset glow for rest
+      ctx.shadowBlur = 0;
+
+      // center plate
+      ctx.beginPath(); ctx.fillStyle = '#0f1623'; ctx.arc(cx,cy,radius-46,0,2*Math.PI); ctx.fill();
+
+      // needle
+      const angle = Math.PI + (p/100)*Math.PI;
+      const nx = cx + (radius-20) * Math.cos(angle);
+      const ny = cy + (radius-20) * Math.sin(angle);
+      ctx.shadowBlur = p >= 67 ? 14 : 0;
+      ctx.shadowColor = 'rgba(239,68,68,0.35)';
+      ctx.beginPath(); ctx.lineWidth = 4; ctx.strokeStyle = '#e6edf3'; ctx.moveTo(cx,cy); ctx.lineTo(nx,ny); ctx.stroke();
+      ctx.beginPath(); ctx.fillStyle = '#e6edf3'; ctx.arc(cx,cy,6,0,2*Math.PI); ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // value text
+      ctx.fillStyle = '#e6edf3';
+      ctx.font = 'bold 20px Roboto, Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(Math.round(p) + '%', cx, cy + 44);
+    }
+    function celebrateIfGreen(p) {
+      if (p <= 33) { // green zone
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    function animateTo(target){
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced){ draw(target); return; }
+      const startTime = performance.now();
+      const startVal = current;
+      const duration = 900;
+
+      function tick(now){
+        const t = Math.min(1, (now - startTime)/duration);
+        const ease = t < 0.5 ? 2*t*t : -1 + (4-2*t)*t; // easeOutQuad-ish
+        current = startVal + (target - startVal)*ease;
+        draw(current);
+        if(t < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          // Animation complete — check for celebration
+          celebrateIfGreen(target);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('resize', ()=>{ resizeCanvas(); draw(current); });
+    resizeCanvas();
+    animateTo(percent);
+  })();
+  </script>
+  <!-- Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function createBarChart() {
+      const ctxBar = document.getElementById('barChart');
+      if(!ctxBar) return;
+
+      {% if categories %}
+      const labels = {{ categories.keys()|list|tojson }};
+      const vals = {{ categories.values()|list|tojson }};
+
+      new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Activity count',
+            data: vals,
+            backgroundColor: 'rgba(37, 99, 235, 0.9)' /* dark blue */
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color: '#cbd5e1' },
+              grid: { color: 'rgba(148,163,184,0.15)' }
+            },
+            x: {
+              ticks: { color: '#cbd5e1' },
+              grid: { color: 'rgba(148,163,184,0.1)' }
+            }
+          },
+          animation: {
+            duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 900,
+            easing: 'easeOutQuart'
+          }
+        }
+      });
+      {% endif %}
+    }
+
+    function createTop5Chart() {
+      const ctxTop5 = document.getElementById('top5Chart');
+      if(!ctxTop5) return;
+
+      {% if top_5_data %}
+      const labels = {{ top_5_data | map(attribute=0) | list | tojson }};
+      const vals = {{ top_5_data | map(attribute=1) | list | tojson }};
+
+      new Chart(ctxTop5, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Top 5 Count',
+            data: vals,
+            backgroundColor: 'rgba(37, 99, 235, 0.92)',
+            borderRadius: 6,
+            barThickness: 22
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: { color: '#cbd5e1' },
+              grid: { color: 'rgba(148,163,184,0.15)' }
+            },
+            y: {
+              ticks: { color: '#cbd5e1', font: { size: 14 } },
+              grid: { color: 'rgba(148,163,184,0.1)' }
+            }
+          },
+          animation: {
+            duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 900,
+            easing: 'easeOutQuart'
+          }
+        }
+      });
+      {% endif %}
+    }
+
+    /* Lazy-init charts when visible */
+    const barBox = document.querySelector('.bar-box');
+    if(barBox){
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            createBarChart();
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      observer.observe(barBox);
+    }
+
+    const top5Box = document.querySelector('.top5-box');
+    if(top5Box){
+      const observerTop5 = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            createTop5Chart();
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      observerTop5.observe(top5Box);
+    }
+
+    /* Smooth scroll to results if present */
+    window.onload = function() {
+      const resultsDiv = document.querySelector('.results');
+      if(resultsDiv){
+        resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  </script>
+
+  <!-- Confetti Animation Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+  function celebrateIfGreen(riskScore) {
+    if (riskScore <= 30) { // change number if your green zone starts somewhere else
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+    }
+  }
+  </script>
+
+</body>
+</html> 

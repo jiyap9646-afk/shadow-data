@@ -1,0 +1,53 @@
+{
+  "createdTime": "2025-03-06T17:01:15.170Z",
+  "modifiedTime": "2025-03-06T17:01:15.170Z",
+  "deviceSettings": [{
+    "deviceTag": 1600785408,
+    "reportingEnabled": false,
+    "devicePrettyName": "vivo 1609",
+    "platformType": "ANDROID",
+    "deviceCreationTime": "2025-03-06T17:01:15.170Z",
+    "latestLocationReportingSettingChange": {
+      "reportingEnabledModificationTime": "2025-03-06T17:01:15.170Z"
+    },
+    "androidOsLevel": 23,
+    "deviceSpec": {
+      "manufacturer": "vivo",
+      "brand": "vivo",
+      "product": "1609",
+      "device": "1609",
+      "model": "vivo 1609",
+      "isLowRam": false
+    },
+    "deviceActiveness": {
+      "hasSavedTimelineData": false
+    }
+  }],
+  "hasReportedLocations": false,
+  "hasSetRetention": false,
+  "storeVisitControl": {
+    "enabled": true,
+    "updateTime": "2025-03-06T17:01:15.170405146Z"
+  },
+  "timelineEditUploadsControl": {
+    "enabled": false,
+    "updateTime": "2025-03-06T17:01:15.170405146Z"
+  },
+  "encryptedBackupsControls": {
+    "1600785408": {
+      "enabled": false
+    }
+  },
+  "retentionControl": {
+    "retentionWindowDays": 90,
+    "updateTime": "2025-03-06T17:01:15.170405146Z"
+  },
+  "timelineEnabled": false,
+  "latestTimelineSettingChange": {
+    "timelineEnabledModificationTime": "2025-03-06T17:01:15.170Z"
+  },
+  "googleOpinionRewardsControl": {
+    "enabled": false,
+    "updateTime": "2025-03-06T17:01:15.170405146Z"
+  }
+}
